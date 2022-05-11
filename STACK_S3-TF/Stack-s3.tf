@@ -9,3 +9,10 @@ resource "aws_s3_bucket_acl" "stack_bucket_acl" {
      bucket = aws_s3_bucket.b.id
      acl = "public-read-write"
  }
+
+resource "aws_s3_bucket_versioning" "versioning" {
+  bucket = aws_s3_bucket.b.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
