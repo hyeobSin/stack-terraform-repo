@@ -32,3 +32,19 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "safeguard" {
     }
   }
 }
+
+resource "aws_s3_bucket" "log_bucket" {
+  bucket = "my-tf-log-bucket"
+}
+
+resource "aws_s3_bucket_acl" "log_bucket_acl" {
+  bucket = aws_s3_bucket.log_bucket.id
+  acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket_logging" "loggin_access" {
+  bucket = aws_s3_bucket.b.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "log/"
+}
