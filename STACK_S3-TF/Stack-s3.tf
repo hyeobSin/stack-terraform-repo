@@ -78,4 +78,7 @@ resource "aws_s3_bucket_website_configuration" "static_website" {
       replace_key_prefix_with = "documents/"
     }
   }
+  redirect_all_requests_to {
+    host_name = "www.example.com"
+  }
 }
