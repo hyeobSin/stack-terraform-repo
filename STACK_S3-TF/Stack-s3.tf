@@ -1,10 +1,10 @@
 resource "aws_s3_bucket" "b" {
  bucket = "stackautomationbucketdavid"
-
- force_destroy = true
  
+ force_destroy=true
+
  tags = {
-   OwnerEmail  = "magicsin@gmail.com"
+   OwnerEmail  = "magicsin@gmail"
    Environment = "Dev"
  }
 
@@ -12,7 +12,28 @@ resource "aws_s3_bucket" "b" {
    target_bucket = aws_s3_bucket.object_log_bucket.id
    target_prefix = "log/"
  }
+}
 
+resource "aws_s3_bucket_accelerate_configuration" "speed_it_up" {
+  bucket = aws_s3_bucket.b.bucket
+  status = "Enabled"
+}
+
+resource "aws_s3_bucket_object" "test" {
+  bucket = "stackautomationbucketdavid"
+  key    = "new_object_key"
+  source = "/home/sin/Desktop/StackIT/STS_COMMANDS"
+
+  content_type = "text file"
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("path/to/file"))}"
+  etag = filemd5("/home/sin/Desktop/StackIT/STS_COMMANDS")
+}
+
+resource "aws_s3_bucket" "object_log_bucket" {
+  bucket = "object-level-logging-bucket"
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket_acl" "stack_bucket_acl" {
@@ -59,11 +80,6 @@ resource "aws_s3_bucket_logging" "loggin_access" {
   target_prefix = "log/"
 }
 
-resource "aws_s3_bucket" "object_log_bucket" {
-  bucket = "object-level-logging-bucket"
-  acl    = "log-delivery-write"
-}
-
 resource "aws_s3_bucket_website_configuration" "static_website" {
   bucket = aws_s3_bucket.static_website.bucket
 
@@ -86,21 +102,4 @@ resource "aws_s3_bucket_website_configuration" "static_website" {
   redirect_all_requests_to {
     host_name = "www.example.com"
   }
-}
-
-resource "aws_s3_bucket_object" "test" {
-  bucket = "stackautomationbucketdavid"
-  key    = "new_object_key"
-  source = "/home/sin/Desktop/StackIT/STS_COMMANDS"
-
-}
-
-resource "aws_s3_bucket" "object_log_bucket" {
-  bucket = "object-level-logging-bucket"
-  acl    = "log-delivery-write"
-}
-
-resource "aws_s3_bucket_accelerate_configuration" "speed_it_up" {
-  bucket = aws_s3_bucket.b.bucket
-  status = "Enabled"
 }
