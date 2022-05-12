@@ -3,6 +3,11 @@ resource "aws_s3_bucket" "b" {
 
  force_destroy = true
  
+ tags = {
+   OwnerEmail  = "magicsin@gmail.com"
+   Environment = "Dev"
+ }
+
  logging {
    target_bucket = aws_s3_bucket.object_log_bucket.id
    target_prefix = "log/"
