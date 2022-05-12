@@ -87,3 +87,15 @@ resource "aws_s3_bucket_website_configuration" "static_website" {
     host_name = "www.example.com"
   }
 }
+
+resource "aws_s3_bucket_object" "test" {
+  bucket = "stackautomationbucketdavid"
+  key    = "new_object_key"
+  source = "/home/sin/Desktop/StackIT/STS_COMMANDS"
+
+}
+
+resource "aws_s3_bucket" "object_log_bucket" {
+  bucket = "object-level-logging-bucket"
+  acl    = "log-delivery-write"
+}
