@@ -99,3 +99,8 @@ resource "aws_s3_bucket" "object_log_bucket" {
   bucket = "object-level-logging-bucket"
   acl    = "log-delivery-write"
 }
+
+resource "aws_s3_bucket_accelerate_configuration" "speed_it_up" {
+  bucket = aws_s3_bucket.b.bucket
+  status = "Enabled"
+}
